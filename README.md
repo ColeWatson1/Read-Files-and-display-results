@@ -1,0 +1,1 @@
+This program showcases reading files and displaying the results you want. In this case it displays the top five students and their grades, the lowest grade, the average score, and the percentage of students above 60% 
