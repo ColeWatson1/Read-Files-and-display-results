@@ -1,0 +1,97 @@
+#This program will be used to take one file with students names, and another with students grades, and display the top five students and scores along with the lowest grade, the average score, and the percentage of students above 60%
+
+def main():
+    #Declare and initialize vars
+    inFile = ""
+    grades = []
+    students = []
+    averageScore = 0.00
+    aboveAverage = 0.00
+    loopCount = 0
+    totalGrade = 0
+
+    
+    try:
+        
+        grades, inFile = AppendGrades(grades, inFile)#Call append grades function
+        students, inFile = AppendStudents(students, inFile)#Calls append students function
+        gradesCopy = [] + grades #makes a copy of the list
+        ShowTopFive(gradesCopy, students)#function call
+        averageScore, aboveAverage, grades, loopCount = GetAverageAndPercent(averageScore, aboveAverage, grades, totalGrade, loopCount)#Calculates average, aboveAverage Function Call
+        #Last 3 output
+        ShowFinal(averageScore,aboveAverage,loopCount, grades)#Function call for output
+    except IOError:
+        print("\n\tOne of the files, either 'Grades.txt' and/or 'Students.txt' is not available. Program Terminates!")
+    except ValueError:
+        print("\n\tSome data in the files has issues with numeric values. Program terminates!")
+    except:
+        print("\n\tThere is an error in the program! Program terminates!")
+
+def AppendGrades(grades, inFile):#Header for appendgrades function WORKS
+    #This function will open the grades.txt file and append each value into the grades list
+    inFile = open("Grades.txt", "r")
+    for i in inFile:
+        grades.append(int(i))
+    inFile.close()
+    inFile = ""
+    return grades, inFile
+
+def AppendStudents(students, inFile):#Header
+    #This reads the students.txt file and appends it to the students list
+    inFile = open("Students.txt", "r")
+    for i in inFile:
+        students.append(i.rstrip("\n"))
+    inFile.close()
+    inFile = ""
+    return students, inFile
+
+def ShowTopFive(gradesCopy, students):#function header
+    #This shows the top five students and their scores 
+    print("\t\t***Top Five Students and Scores***")
+    print("\t\t----------------------------------")
+    highestGrade = 0
+    index = 0
+    for i in range(4):
+        
+        highestGrade = max(gradesCopy)
+        index = gradesCopy.index(highestGrade)
+        print("\t\t\t{0:10s}: {1:,.2f}".format(students[index], float(highestGrade)))
+        gradesCopy[index] = 0
+        while highestGrade in gradesCopy:
+            index = gradesCopy.index(highestGrade)
+            print("\t\t\t{0:10s}: {1:,.2f}".format(students[index], float(highestGrade)))
+            gradesCopy[index] = 0
+
+    
+
+def GetAverageAndPercent(averageScore, aboveAverage, grades, totalGrade, loopCount):#Header
+    #This function calculates the average score and the above average number
+    grade = 0
+    for grade in grades:
+        totalGrade += grade #adds up the total grade
+        loopCount += 1#counts the numbers of grades for average
+    averageScore = totalGrade/loopCount#calculates average
+ 
+    for grade in grades:
+        
+        if (grade > averageScore):
+            aboveAverage += 1
+            #print(aboveAverage)
+    return averageScore, aboveAverage, grades, loopCount
+
+                   
+def ShowFinal(averageScore,aboveAverage, loopCount,grades):#this is a function header for showing the final output
+    #This function takes the calculations from GetAverageAndPercent and displays the returned values
+    print("\n\tThe lowest grade on the exam was: {0:,.2f}".format(min(grades)))#displays the lowest grade
+    print("\n\tThe average score on the exam was: {0:,.2f}".format(averageScore))#displays the average score
+    print("\n\tThe percentage of students who scored above the average is: {0:,.1%}".format(aboveAverage/loopCount))#displays the percentage of students who scored above average
+    
+
+
+
+
+
+    
+main()#call main function
+    
+
